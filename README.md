@@ -64,7 +64,7 @@ The project is organised into the following main components:
 - `static/` – Static assets, including CSS.
 - `manage.py` – Django management utility.
 - `requirements.txt` – Python dependencies.
-- `.env` – Environment-specific configuration and sensitive settings.
+
 
 ## 5. Installation and Setup
 
@@ -80,11 +80,8 @@ Ensure the following are installed:
 ### Step 1: Clone the Repository
 
 
-git clone <RushilSingh201120>
+git clone https://github.com/RushilSingh201120/The-Weekly-Times.git
 cd The_Weekly_Times
-
-
-Replace the repository URL with the actual GitHub repository address.
 
 ### Step 2: Create a Virtual Environment
 
@@ -128,7 +125,6 @@ INTERNAL_API_KEY=your-internal-api-key
 
 The application loads database credentials from environment variables using `python-dotenv`.
 
-**Important:** Never upload your `.env` file to GitHub or expose passwords, secret keys or API credentials in a public repository.
 
 ### Step 5: Configure the Database
 
@@ -139,7 +135,6 @@ Ensure the database settings in `settings.py` correctly load these environment v
 ### Step 6: Apply Database Migrations
 
 
-python manage.py makemigrations
 python manage.py migrate
 
 

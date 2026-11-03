@@ -1,0 +1,122 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Article Management | The Weekly Times</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <header>
+        <h1>
+            <a href="{% url 'news:article_list' %}">
+                The Weekly Times
+            </a>
+        </h1>
+
+        <h2>Article Management</h2>
+
+        <p>Manage all submitted and published articles.</p>
+
+        <div class="header-navigation">
+
+            <a class="nav-button" href="{% url 'news:review_queue' %}">
+                Editor Review Queue
+            </a>
+
+            <a class="nav-button" href="{% url 'news:article_list' %}">
+                Homepage
+            </a>
+
+        </div>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </header>
+
+    <main>
+
+        <h2>All Articles</h2>
+
+        {% if articles %}
+
+            {% for article in articles %}
+
+                <article class="review-card">
+
+                    <h3>{{ article.title }}</h3>
+
+                    {% if article.status == "approved" %}
+                        <span class="status-approved">
+                            Approved
+                        </span>
+                    {% else %}
+                        <span class="status-pending">
+                            Pending approval
+                        </span>
+                    {% endif %}
+
+                    <p>
+                        <strong>Journalist:</strong>
+                        {{ article.author.username }}
+                    </p>
+
+                    <p>
+                        <strong>Publisher:</strong>
+
+                        {% if article.publisher %}
+                            {{ article.publisher.name }}
+                        {% else %}
+                            Independent article
+                        {% endif %}
+                    </p>
+
+                    <p>
+                        <strong>Submitted:</strong>
+                        {{ article.created_at|date:"d F Y, H:i" }}
+                    </p>
+
+                    <p>{{ article.content|truncatewords:40 }}</p>
+
+                    <div class="card-actions">
+
+                        <a class="action-link"
+                           href="{% url 'news:article_detail' article.id %}">
+                            Read Full Article
+                        </a>
+
+                        <a class="action-link"
+                           href="{% url 'news:article_update' article.id %}">
+                            Edit Article
+                        </a>
+
+                        <a class="action-link"
+                           href="{% url 'news:article_delete' article.id %}">
+                            Delete Article
+                        </a>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="empty-message">
+                There are currently no articles available.
+            </p>
+
+        {% endif %}
+
+    </main>
+
+</body>
+</html>

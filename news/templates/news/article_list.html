@@ -1,0 +1,165 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Weekly Times</title>
+
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <header>
+        <h1>The Weekly Times</h1>
+        <p>Your source for the latest news and stories.</p>
+
+        {% if user.is_authenticated %}
+
+            <p>Logged in as: {{ user.username }}</p>
+
+            <div class="header-navigation">
+
+                {% if user.role == "journalist" %}
+                    <a class="nav-button"
+                       href="{% url 'news:journalist_dashboard' %}">
+                        Journalist Dashboard
+                    </a>
+                {% endif %}
+
+                {% if user.role == "editor" %}
+                    <a class="nav-button"
+                       href="{% url 'news:review_queue' %}">
+                        Editor Review Queue
+                    </a>
+
+                    <a class="nav-button"
+                       href="{% url 'news:editor_article_management' %}">
+                        Article Management
+                    </a>
+
+                    <a class="nav-button"
+                       href="{% url 'news:editor_newsletter_management' %}">
+                        Newsletter Management
+                    </a>
+                {% endif %}
+
+                {% if user.role == "reader" %}
+                    <a class="nav-button"
+                       href="{% url 'news:subscriptions' %}">
+                        Manage Subscriptions
+                    </a>
+                {% endif %}
+
+            </div>
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+
+        {% else %}
+
+            <p>
+                <a href="{% url 'login' %}">Login</a> |
+                <a href="{% url 'news:register' %}">Register</a>
+            </p>
+
+        {% endif %}
+    </header>
+
+    <main>
+
+        <section class="article-list">
+
+            <h2>Latest Articles</h2>
+
+            {% for article in articles %}
+
+                <article class="article-card">
+
+                    <h3>
+                        <a href="{% url 'news:article_detail' article.id %}">
+                            {{ article.title }}
+                        </a>
+                    </h3>
+
+                    <p>
+                        By {{ article.author.username }}
+
+                        {% if article.publisher %}
+                            | {{ article.publisher.name }}
+                        {% endif %}
+                    </p>
+
+                    <p>
+                        Published:
+                        {{ article.created_at|date:"d F Y" }}
+                    </p>
+
+                    <p>
+                        {{ article.content|truncatewords:30 }}
+                    </p>
+
+                    <a href="{% url 'news:article_detail' article.id %}">
+                        Read More
+                    </a>
+
+                </article>
+
+            {% empty %}
+
+                <p>No articles are currently available.</p>
+
+            {% endfor %}
+
+        </section>
+
+        <section class="article-list">
+
+            <h2>Latest Newsletters</h2>
+
+            {% for newsletter in newsletters %}
+
+                <article class="article-card">
+
+                    <h3>{{ newsletter.title }}</h3>
+
+                    <p>
+                        By {{ newsletter.author.username }}
+
+                        {% if newsletter.publisher %}
+                            | {{ newsletter.publisher.name }}
+                        {% endif %}
+                    </p>
+
+                    <p>
+                        Created:
+                        {{ newsletter.created_at|date:"d F Y" }}
+                    </p>
+
+                    <p>
+                        {{ newsletter.content|truncatewords:30 }}
+                    </p>
+
+                    <a href="{% url 'news:newsletter_detail' newsletter.id %}">
+                        Read Full Newsletter
+                    </a>
+
+                </article>
+
+            {% empty %}
+
+                <p>No newsletters are currently available.</p>
+
+            {% endfor %}
+
+        </section>
+
+    </main>
+
+</body>
+</html>

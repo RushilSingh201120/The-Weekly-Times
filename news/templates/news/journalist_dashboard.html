@@ -1,0 +1,128 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Journalist Dashboard | The Weekly Times</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>The Weekly Times</h1>
+        <h2>Journalist Dashboard</h2>
+        <p>Welcome, {{ request.user.username }}.</p>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </header>
+
+    <main>
+        <section class="dashboard-actions">
+            <h2>Manage Your Content</h2>
+
+            <p>
+                <a class="action-link" href="{% url 'news:article_create' %}">
+                    Create a New Article
+                </a>
+            </p>
+
+            <p>
+                <a class="action-link" href="{% url 'news:newsletter_create' %}">
+                    Create Newsletter
+                </a>
+            </p>
+        </section>
+
+        <section class="dashboard-section">
+            <h2>My Articles</h2>
+
+            {% for article in articles %}
+                <article class="dashboard-card">
+                    <h3>
+                        <a href="{% url 'news:article_detail' article.id %}">
+                            {{ article.title }}
+                        </a>
+                    </h3>
+
+                    <p>
+                        Status:
+                        {% if article.status == "approved" %}
+                            <span class="status-approved">Approved</span>
+                        {% else %}
+                            <span class="status-pending">Pending approval</span>
+                        {% endif %}
+                    </p>
+
+                    {% if article.publisher %}
+                        <p>Publisher: {{ article.publisher.name }}</p>
+                    {% endif %}
+
+                    <p>
+                        Last updated:
+                        {{ article.updated_at|date:"d F Y, H:i" }}
+                    </p>
+
+                    <div class="card-actions">
+                        <a href="{% url 'news:article_update' article.id %}">
+                            Edit Article
+                        </a>
+
+                        <a href="{% url 'news:article_delete' article.id %}">
+                            Delete Article
+                        </a>
+                    </div>
+                </article>
+            {% empty %}
+                <p>You have not written any articles yet.</p>
+            {% endfor %}
+        </section>
+
+        <section class="dashboard-section">
+            <h2>My Newsletters</h2>
+
+            {% for newsletter in newsletters %}
+                <article class="dashboard-card">
+                    <h3>{{ newsletter.title }}</h3>
+
+                    {% if newsletter.publisher %}
+                        <p>Publisher: {{ newsletter.publisher.name }}</p>
+                    {% endif %}
+
+                    <p>
+                        Created:
+                        {{ newsletter.created_at|date:"d F Y, H:i" }}
+                    </p>
+
+                    <p>{{ newsletter.content|truncatewords:40 }}</p>
+
+                    <div class="card-actions">
+
+                        <a href="{% url 'news:newsletter_detail' newsletter.id %}">
+                            Read Full Newsletter
+                         </a>
+                        <a href="{% url 'news:newsletter_update' newsletter.id %}">
+                            Edit Newsletter
+                        </a>
+
+                        <a href="{% url 'news:newsletter_delete' newsletter.id %}">
+                            Delete Newsletter
+                        </a>
+                    </div>
+                </article>
+            {% empty %}
+                <p>You have not created any newsletters yet.</p>
+            {% endfor %}
+        </section>
+
+        <p class="back-link">
+            <a href="{% url 'news:article_list' %}">
+                Return to the News Homepage
+            </a>
+        </p>
+    </main>
+</body>
+</html>

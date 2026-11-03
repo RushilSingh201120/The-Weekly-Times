@@ -1,0 +1,61 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ article.title }} | The Weekly Times</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>
+            <a href="{% url 'news:article_list' %}">
+                The Weekly Times
+            </a>
+        </h1>
+
+        {% if user.is_authenticated %}
+            <p>Logged in as: {{ user.username }}</p>
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% endif %}
+    </header>
+
+    <main>
+        <article>
+            <h2>{{ article.title }}</h2>
+
+            <p>By {{ article.author.username }}</p>
+
+            {% if article.publisher %}
+                <p>Publisher: {{ article.publisher.name }}</p>
+            {% endif %}
+
+            <p>Published: {{ article.created_at|date:"d F Y" }}</p>
+
+            <div class="article-content">
+                {{ article.content|linebreaks }}
+            </div>
+        </article>
+
+        {% if user.is_authenticated and user.role == "editor" %}
+            <p>
+                <a href="{% url 'news:review_queue' %}">
+                    Back to Editor Review Queue
+                </a>
+            </p>
+        {% endif %}
+
+        <p>
+            <a href="{% url 'news:article_list' %}">
+                Back to articles
+            </a>
+        </p>
+    </main>
+</body>
+</html>

@@ -1,0 +1,110 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscriptions | The Weekly Times</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>The Weekly Times</h1>
+        <h2>Manage Your Subscriptions</h2>
+
+        <p>Follow journalists and publishers to receive their news.</p>
+
+        <p>
+            <a href="{% url 'news:article_list' %}">Home</a>
+        </p>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </header>
+
+    <main>
+        <section class="subscription-section">
+            <h2>Journalists</h2>
+
+            <div class="subscription-list">
+                {% for journalist in journalists %}
+                    <article class="subscription-card">
+                        <h3>{{ journalist.username }}</h3>
+
+                        {% if journalist in subscribed_journalists %}
+                            <p class="subscription-status">
+                                You are subscribed to this journalist.
+                            </p>
+                            <form method="post"
+                                  action="{% url 'news:subscribe_journalist' journalist.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="unsubscribe-button">
+                                    Unsubscribe
+                                </button>
+                            </form>
+                        {% else %}
+                            <p class="subscription-description">
+                                Follow this journalist to receive their news.
+                            </p>
+                            <form method="post"
+                                  action="{% url 'news:subscribe_journalist' journalist.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="subscribe-button">
+                                    Subscribe
+                                </button>
+                            </form>
+                        {% endif %}
+                    </article>
+                {% empty %}
+                    <p class="empty-message">
+                        No journalists are available yet.
+                    </p>
+                {% endfor %}
+            </div>
+        </section>
+
+        <section class="subscription-section">
+            <h2>Publishers</h2>
+
+            <div class="subscription-list">
+                {% for publisher in publishers %}
+                    <article class="subscription-card">
+                        <h3>{{ publisher.name }}</h3>
+
+                        {% if publisher in subscribed_publishers %}
+                            <p class="subscription-status">
+                                You are subscribed to this publisher.
+                            </p>
+                            <form method="post"
+                                  action="{% url 'news:subscribe_publisher' publisher.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="unsubscribe-button">
+                                    Unsubscribe
+                                </button>
+                            </form>
+                        {% else %}
+                            <p class="subscription-description">
+                                Follow this publisher to receive their news.
+                            </p>
+                            <form method="post"
+                                  action="{% url 'news:subscribe_publisher' publisher.id %}">
+                                {% csrf_token %}
+                                <button type="submit" class="subscribe-button">
+                                    Subscribe
+                                </button>
+                            </form>
+                        {% endif %}
+                    </article>
+                {% empty %}
+                    <p class="empty-message">
+                        No publishers are available yet.
+                    </p>
+                {% endfor %}
+            </div>
+        </section>
+    </main>
+</body>
+</html>

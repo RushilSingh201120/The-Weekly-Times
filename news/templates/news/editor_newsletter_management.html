@@ -1,0 +1,119 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Newsletter Management | The Weekly Times</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <header>
+        <h1>
+            <a href="{% url 'news:article_list' %}">
+                The Weekly Times
+            </a>
+        </h1>
+
+        <h2>Newsletter Management</h2>
+
+        <p>Manage all newsletters created by Journalists and Editors.</p>
+
+        <div class="header-navigation">
+
+            <a class="nav-button" href="{% url 'news:review_queue' %}">
+                Editor Review Queue
+            </a>
+
+            <a class="nav-button" href="{% url 'news:editor_article_management' %}">
+                Article Management
+            </a>
+
+            <a class="nav-button" href="{% url 'news:article_list' %}">
+                Homepage
+            </a>
+
+        </div>
+
+        <form method="post" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    </header>
+
+    <main>
+
+        <h2>All Newsletters</h2>
+
+        {% if newsletters %}
+
+            {% for newsletter in newsletters %}
+
+                <article class="review-card">
+
+                    <h3>{{ newsletter.title }}</h3>
+
+                    <p>
+                        <strong>Author:</strong>
+                        {{ newsletter.author.username }}
+                    </p>
+
+                    <p>
+                        <strong>Publisher:</strong>
+
+                        {% if newsletter.publisher %}
+                            {{ newsletter.publisher.name }}
+                        {% else %}
+                            Independent
+                        {% endif %}
+                    </p>
+
+                    <p>
+                        <strong>Created:</strong>
+                        {{ newsletter.created_at|date:"d F Y, H:i" }}
+                    </p>
+
+                    <p>{{ newsletter.content|truncatewords:40 }}</p>
+
+                    <p>
+                        <strong>Articles included:</strong>
+                        {{ newsletter.articles.count }}
+                    </p>
+
+                    <div class="card-actions">
+                            <a class="action-link"
+                                 href="{% url 'news:newsletter_detail' newsletter.id %}">
+                                 Read Full Newsletter
+                            </a>
+
+                        <a class="action-link"
+                           href="{% url 'news:newsletter_update' newsletter.id %}">
+                            Edit Newsletter
+                        </a>
+
+                        <a class="action-link"
+                           href="{% url 'news:newsletter_delete' newsletter.id %}">
+                            Delete Newsletter
+                        </a>
+
+                    </div>
+
+                </article>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p class="empty-message">
+                There are currently no newsletters available.
+            </p>
+
+        {% endif %}
+
+    </main>
+
+</body>
+</html>

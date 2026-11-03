@@ -1,0 +1,59 @@
+
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Article | The Weekly Times</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+
+<body>
+
+    <header>
+        <h1>The Weekly Times</h1>
+        <h2>Delete Article</h2>
+    </header>
+
+    <main>
+        <section class="delete-container">
+
+            <p class="delete-warning">
+                Are you sure you want to delete this article?
+            </p>
+
+            <h3>{{ article.title }}</h3>
+
+            <p class="delete-note">
+                This action cannot be undone.
+            </p>
+
+            <form method="post">
+                {% csrf_token %}
+                <button type="submit" class="delete-button">
+                    Yes, Delete Article
+                </button>
+            </form>
+
+            <p class="back-link">
+
+                {% if user.role == "editor" %}
+                    <a href="{% url 'news:review_queue' %}">
+                        Cancel and return to Editor Review Queue
+                    </a>
+
+                {% else %}
+                    <a href="{% url 'news:journalist_dashboard' %}">
+                        Cancel and return to Journalist Dashboard
+                    </a>
+                {% endif %}
+
+            </p>
+
+        </section>
+    </main>
+
+</body>
+</html>

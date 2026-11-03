@@ -1,0 +1,94 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% if newsletter %}
+            Edit Newsletter
+        {% else %}
+            Create Newsletter
+        {% endif %}
+        | The Weekly Times
+    </title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <header>
+        <h1>The Weekly Times</h1>
+        <p>Your source for the latest approved news.</p>
+
+        {% if user.is_authenticated %}
+            <p>Logged in as: {{ user.username }}</p>
+
+            {% if user.role == "editor" %}
+                <p>
+                    <a href="{% url 'news:editor_newsletter_management' %}">
+                        Newsletter Management
+                    </a>
+                </p>
+            {% else %}
+                <p>
+                    <a href="{% url 'news:journalist_dashboard' %}">
+                        Journalist Dashboard
+                    </a>
+                </p>
+            {% endif %}
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% else %}
+            <p>
+                <a href="{% url 'login' %}">Login</a> |
+                <a href="{% url 'news:register' %}">Register</a>
+            </p>
+        {% endif %}
+    </header>
+
+    <main>
+        <section class="form-container">
+            <h2>
+                {% if newsletter %}
+                    Edit Newsletter
+                {% else %}
+                    Create Newsletter
+                {% endif %}
+            </h2>
+
+            <p class="form-intro">
+                Write a newsletter to share news and updates with your readers.
+            </p>
+
+            <form method="post" class="content-form">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <button type="submit">
+                    {% if newsletter %}
+                        Save Changes
+                    {% else %}
+                        Create Newsletter
+                    {% endif %}
+                </button>
+            </form>
+
+            <p class="back-link">
+                {% if user.role == "editor" %}
+                    <a href="{% url 'news:editor_newsletter_management' %}">
+                        Return to Newsletter Management
+                    </a>
+                {% else %}
+                    <a href="{% url 'news:journalist_dashboard' %}">
+                        Back to Journalist Dashboard
+                    </a>
+                {% endif %}
+            </p>
+        </section>
+    </main>
+</body>
+</html>

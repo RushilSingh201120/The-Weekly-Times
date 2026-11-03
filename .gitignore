@@ -1,0 +1,23 @@
+
+# Django
+*.log
+db.sqlite3
+media/
+
+# Environment and editor files
+.env
+.env.*
+!.env.example
+venv/
+myenv/
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Test and coverage files
+.coverage
+htmlcov/
+.pytest_cache/

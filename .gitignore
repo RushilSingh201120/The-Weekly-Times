@@ -21,3 +21,7 @@ __pycache__/
 .coverage
 htmlcov/
 .pytest_cache/
+
+
+# Local database backup
+weekly_times_backup.json

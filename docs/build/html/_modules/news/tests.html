@@ -1,0 +1,823 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>news.tests &mdash; The Weekly Times 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            The Weekly Times
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../modules.html">The Weekly Times Application Code Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">The Weekly Times</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">news.tests</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for news.tests</h1><div class="highlight"><pre>
+<span></span><span class="sd">"""Test news application functionality and API permissions."""</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.contrib.auth</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_user_model</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.test</span><span class="w"> </span><span class="kn">import</span> <span class="n">TestCase</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.urls</span><span class="w"> </span><span class="kn">import</span> <span class="n">reverse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">unittest.mock</span><span class="w"> </span><span class="kn">import</span> <span class="n">patch</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">django.test</span><span class="w"> </span><span class="kn">import</span> <span class="n">override_settings</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">ApprovedArticleLog</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">rest_framework.test</span><span class="w"> </span><span class="kn">import</span> <span class="n">APIClient</span>
+
+<span class="kn">from</span><span class="w"> </span><span class="nn">.models</span><span class="w"> </span><span class="kn">import</span> <span class="n">Article</span><span class="p">,</span> <span class="n">Publisher</span><span class="p">,</span> <span class="n">Newsletter</span>
+
+
+<span class="n">User</span> <span class="o">=</span> <span class="n">get_user_model</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="NewsAPIPermissionTests">
+<a class="viewcode-back" href="../../news.html#news.tests.NewsAPIPermissionTests">[docs]</a>
+<span class="k">class</span><span class="w"> </span><span class="nc">NewsAPIPermissionTests</span><span class="p">(</span><span class="n">TestCase</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">"""Test role-based access to the article API."""</span>
+
+<div class="viewcode-block" id="NewsAPIPermissionTests.setUp">
+<a class="viewcode-back" href="../../news.html#news.tests.NewsAPIPermissionTests.setUp">[docs]</a>
+    <span class="k">def</span><span class="w"> </span><span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">"""Create test users, a publisher, and sample articles."""</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reader</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="s2">"test_reader"</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="s2">"TestPassword123!"</span><span class="p">,</span>
+            <span class="n">email</span><span class="o">=</span><span class="s2">"reader@example.com"</span><span class="p">,</span>
+            <span class="n">role</span><span class="o">=</span><span class="s2">"reader"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">journalist</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="s2">"test_journalist"</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="s2">"TestPassword123!"</span><span class="p">,</span>
+            <span class="n">role</span><span class="o">=</span><span class="s2">"journalist"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">editor</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="s2">"test_editor"</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="s2">"TestPassword123!"</span><span class="p">,</span>
+            <span class="n">role</span><span class="o">=</span><span class="s2">"editor"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span> <span class="o">=</span> <span class="n">Publisher</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            
+            <span class="n">name</span><span class="o">=</span><span class="s2">"Test Publisher"</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">"Publisher for automated tests."</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">subscribers</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">approved_article</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Approved Test Article"</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">"This article is approved."</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">,</span>
+            <span class="n">publisher</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="p">,</span>
+            <span class="n">status</span><span class="o">=</span><span class="n">Article</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">APPROVED</span><span class="p">,</span>
+            <span class="n">approved_by</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">editor</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Pending Test Article"</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">"This article is awaiting approval."</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">,</span>
+            <span class="n">publisher</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="p">,</span>
+            <span class="n">status</span><span class="o">=</span><span class="n">Article</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">PENDING</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span> <span class="o">=</span> <span class="n">APIClient</span><span class="p">()</span></div>
+
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_unauthenticated_user_cannot_view_articles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/articles/"</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">401</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_reader_can_view_approved_articles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/articles/"</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="n">article_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">approved_article</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">article_ids</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">article_ids</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_journalist_can_create_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">"/api/articles/"</span><span class="p">,</span>
+            <span class="p">{</span>
+                <span class="s2">"title"</span><span class="p">:</span> <span class="s2">"New Test Article"</span><span class="p">,</span>
+                <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"Created through an automated test."</span><span class="p">,</span>
+                <span class="s2">"publisher"</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"author"</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="o">.</span><span class="n">id</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"status"</span><span class="p">],</span>
+            <span class="n">Article</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">PENDING</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_reader_cannot_create_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">"/api/articles/"</span><span class="p">,</span>
+            <span class="p">{</span>
+                <span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Reader Test Article"</span><span class="p">,</span>
+                <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"A reader should not create this."</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_editor_can_view_pending_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">editor</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/articles/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_journalist_can_update_own_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/articles/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Updated Test Article"</span><span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"title"</span><span class="p">],</span>
+            <span class="s2">"Updated Test Article"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_reader_cannot_update_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/articles/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">approved_article</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Reader Attempt"</span><span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
+
+    <span class="nd">@patch</span><span class="p">(</span><span class="s2">"news.signals.requests.post"</span><span class="p">)</span>
+    <span class="nd">@patch</span><span class="p">(</span><span class="s2">"news.signals.send_mail"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_editor_can_approve_pending_article</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">mock_send_mail</span><span class="p">,</span> <span class="n">mock_post</span>
+    <span class="p">):</span>
+        <span class="n">mock_post</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="mi">201</span>
+        <span class="n">mock_post</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">"Created"</span>
+        <span class="n">mock_post</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">raise_for_status</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_login</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">editor</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">reverse</span><span class="p">(</span>
+            <span class="s2">"news:approve_article"</span><span class="p">,</span>
+             <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">id</span><span class="p">]</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">302</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">refresh_from_db</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+         <span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
+         <span class="n">Article</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">APPROVED</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">approved_by</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">editor</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIsNotNone</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">approved_at</span><span class="p">)</span>
+
+        <span class="n">mock_send_mail</span><span class="o">.</span><span class="n">assert_called_once</span><span class="p">()</span>
+        <span class="n">mock_post</span><span class="o">.</span><span class="n">assert_called_once</span><span class="p">()</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_reader_cannot_approve_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_login</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">reverse</span><span class="p">(</span>
+                <span class="s2">"news:approve_article"</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">id</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_journalist_cannot_update_another_journalists_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">other_journalist</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="s2">"other_journalist"</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="s2">"TestPassword123!"</span><span class="p">,</span>
+            <span class="n">role</span><span class="o">=</span><span class="s2">"journalist"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">other_article</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Another Journalist Article"</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">"This belongs to another journalist."</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="n">other_journalist</span><span class="p">,</span>
+            <span class="n">status</span><span class="o">=</span><span class="n">Article</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">PENDING</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/articles/</span><span class="si">{</span><span class="n">other_article</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Unauthorised Update"</span><span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_journalist_cannot_delete_another_journalists_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">other_journalist</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="s2">"delete_test_journalist"</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="s2">"TestPassword123!"</span><span class="p">,</span>
+            <span class="n">role</span><span class="o">=</span><span class="s2">"journalist"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">other_article</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Article Protected from Deletion"</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">"This belongs to another journalist."</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="n">other_journalist</span><span class="p">,</span>
+            <span class="n">status</span><span class="o">=</span><span class="n">Article</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">PENDING</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/articles/</span><span class="si">{</span><span class="n">other_article</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">404</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+            <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">other_article</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_editor_can_delete_another_journalists_article</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">other_journalist</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="s2">"editor_delete_test"</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="s2">"TestPassword123!"</span><span class="p">,</span>
+            <span class="n">role</span><span class="o">=</span><span class="s2">"journalist"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">other_article</span> <span class="o">=</span> <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Article for Editor Deletion"</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">"An editor should be able to delete this."</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="n">other_journalist</span><span class="p">,</span>
+            <span class="n">status</span><span class="o">=</span><span class="n">Article</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">PENDING</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">editor</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/articles/</span><span class="si">{</span><span class="n">other_article</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">204</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span>
+            <span class="n">Article</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">other_article</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="p">)</span>
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_reader_can_view_subscribed_approved_articles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/articles/subscribed/"</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+        <span class="n">article_ids</span> <span class="o">=</span> <span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="s2">"id"</span><span class="p">]</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">approved_article</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">article_ids</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertNotIn</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">id</span><span class="p">,</span> <span class="n">article_ids</span><span class="p">)</span>        
+       
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_journalist_cannot_access_subscribed_articles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/articles/subscribed/"</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>     
+
+    
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_user_can_obtain_api_token</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">"/api/token/"</span><span class="p">,</span>
+            <span class="p">{</span>
+                <span class="s2">"username"</span><span class="p">:</span> <span class="s2">"test_reader"</span><span class="p">,</span>
+                <span class="s2">"password"</span><span class="p">:</span> <span class="s2">"TestPassword123!"</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span><span class="s2">"token"</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>     
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_reader_cannot_create_newsletter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">"/api/newsletters/"</span><span class="p">,</span>
+            <span class="p">{</span>
+                <span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Reader Test Newsletter"</span><span class="p">,</span>
+                <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"A reader should not create this newsletter."</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
+        
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_reader_can_view_newsletters</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">"/api/newsletters/"</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>           
+      
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_journalist_can_create_newsletter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">"/api/newsletters/"</span><span class="p">,</span>
+            <span class="p">{</span>
+                <span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Journalist Test Newsletter"</span><span class="p">,</span>
+                <span class="s2">"content"</span><span class="p">:</span> <span class="s2">"A newsletter created by a journalist."</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"author"</span><span class="p">],</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="o">.</span><span class="n">id</span><span class="p">,</span>
+        <span class="p">)</span>     
+   
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_journalist_can_update_own_newsletter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">newsletter</span> <span class="o">=</span> <span class="n">Newsletter</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Original Newsletter"</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">"Original newsletter content."</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/newsletters/</span><span class="si">{</span><span class="n">newsletter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Updated Newsletter"</span><span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"title"</span><span class="p">],</span> <span class="s2">"Updated Newsletter"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_journalist_cannot_update_another_journalists_newsletter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">other_journalist</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="s2">"newsletter_owner"</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="s2">"TestPassword123!"</span><span class="p">,</span>
+            <span class="n">role</span><span class="o">=</span><span class="s2">"journalist"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">newsletter</span> <span class="o">=</span> <span class="n">Newsletter</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Another Journalist Newsletter"</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">"This belongs to another journalist."</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="n">other_journalist</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/newsletters/</span><span class="si">{</span><span class="n">newsletter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Unauthorised Update"</span><span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_reader_cannot_update_newsletter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">newsletter</span> <span class="o">=</span> <span class="n">Newsletter</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Protected Newsletter"</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">"Readers cannot edit this."</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/newsletters/</span><span class="si">{</span><span class="n">newsletter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Reader Attempt"</span><span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_reader_cannot_delete_newsletter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">newsletter</span> <span class="o">=</span> <span class="n">Newsletter</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Protected Newsletter"</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">"Readers cannot delete this."</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/newsletters/</span><span class="si">{</span><span class="n">newsletter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_journalist_can_delete_own_newsletter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">newsletter</span> <span class="o">=</span> <span class="n">Newsletter</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Newsletter to Delete"</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">"Created by the journalist."</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/newsletters/</span><span class="si">{</span><span class="n">newsletter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">204</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span>
+            <span class="n">Newsletter</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">newsletter</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_journalist_cannot_delete_another_journalists_newsletter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">other_journalist</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="s2">"newsletter_delete_owner"</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="s2">"TestPassword123!"</span><span class="p">,</span>
+            <span class="n">role</span><span class="o">=</span><span class="s2">"journalist"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="n">newsletter</span> <span class="o">=</span> <span class="n">Newsletter</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Protected Newsletter"</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">"Owned by another journalist."</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="n">other_journalist</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/newsletters/</span><span class="si">{</span><span class="n">newsletter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+            <span class="n">Newsletter</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">newsletter</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_editor_can_update_another_journalists_newsletter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">newsletter</span> <span class="o">=</span> <span class="n">Newsletter</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Journalist Newsletter"</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">"Original content."</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">editor</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/newsletters/</span><span class="si">{</span><span class="n">newsletter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">"title"</span><span class="p">:</span> <span class="s2">"Editor Updated Newsletter"</span><span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"title"</span><span class="p">],</span> <span class="s2">"Editor Updated Newsletter"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_editor_can_delete_another_journalists_newsletter</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">newsletter</span> <span class="o">=</span> <span class="n">Newsletter</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Newsletter for Editor Deletion"</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">"An editor can delete this."</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">editor</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/newsletters/</span><span class="si">{</span><span class="n">newsletter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">204</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span>
+            <span class="n">Newsletter</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">newsletter</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_newsletter_can_be_linked_to_articles</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">newsletter</span> <span class="o">=</span> <span class="n">Newsletter</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">title</span><span class="o">=</span><span class="s2">"Newsletter with Articles"</span><span class="p">,</span>
+            <span class="n">content</span><span class="o">=</span><span class="s2">"A newsletter containing articles."</span><span class="p">,</span>
+            <span class="n">author</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/newsletters/</span><span class="si">{</span><span class="n">newsletter</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">"articles"</span><span class="p">:</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">approved_article</span><span class="o">.</span><span class="n">id</span><span class="p">]},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+
+        <span class="n">newsletter</span><span class="o">.</span><span class="n">refresh_from_db</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span>
+            <span class="n">newsletter</span><span class="o">.</span><span class="n">articles</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span>
+                <span class="nb">id</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">approved_article</span><span class="o">.</span><span class="n">id</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="p">)</span>
+   
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_reader_cannot_create_publisher</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">"/api/publishers/"</span><span class="p">,</span>
+            <span class="p">{</span>
+                <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Reader Publisher"</span><span class="p">,</span>
+                <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"A reader should not create this."</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_journalist_cannot_create_publisher</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">"/api/publishers/"</span><span class="p">,</span>
+            <span class="p">{</span>
+                <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Journalist Publisher"</span><span class="p">,</span>
+                <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"A journalist should not create this."</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">403</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_editor_can_create_publisher</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">editor</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="s2">"/api/publishers/"</span><span class="p">,</span>
+            <span class="p">{</span>
+                <span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Editor Test Publisher"</span><span class="p">,</span>
+                <span class="s2">"description"</span><span class="p">:</span> <span class="s2">"Created by an editor."</span><span class="p">,</span>
+            <span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">201</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_editor_can_update_publisher</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">editor</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">patch</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/publishers/</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">"name"</span><span class="p">:</span> <span class="s2">"Updated Test Publisher"</span><span class="p">},</span>
+            <span class="nb">format</span><span class="o">=</span><span class="s2">"json"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">200</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s2">"name"</span><span class="p">],</span> <span class="s2">"Updated Test Publisher"</span><span class="p">)</span>
+
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_editor_can_delete_publisher</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">publisher</span> <span class="o">=</span> <span class="n">Publisher</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create</span><span class="p">(</span>
+            <span class="n">name</span><span class="o">=</span><span class="s2">"Publisher to Delete"</span><span class="p">,</span>
+            <span class="n">description</span><span class="o">=</span><span class="s2">"Created for deletion testing."</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_authenticate</span><span class="p">(</span><span class="n">user</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">editor</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">"/api/publishers/</span><span class="si">{</span><span class="n">publisher</span><span class="o">.</span><span class="n">id</span><span class="si">}</span><span class="s2">/"</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">204</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span>
+            <span class="n">Publisher</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">filter</span><span class="p">(</span><span class="nb">id</span><span class="o">=</span><span class="n">publisher</span><span class="o">.</span><span class="n">id</span><span class="p">)</span><span class="o">.</span><span class="n">exists</span><span class="p">()</span>
+        <span class="p">)</span>
+
+    <span class="nd">@override_settings</span><span class="p">(</span>
+        <span class="n">APPROVED_ARTICLE_API_URL</span><span class="o">=</span><span class="s2">"https://example.com/api/approved/"</span><span class="p">,</span>
+        <span class="n">INTERNAL_API_KEY</span><span class="o">=</span><span class="s2">"test-api-key"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nd">@patch</span><span class="p">(</span><span class="s2">"news.signals.requests.post"</span><span class="p">)</span>
+    <span class="nd">@patch</span><span class="p">(</span><span class="s2">"news.signals.send_mail"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_approval_sends_email_to_unique_subscribers</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">mock_send_mail</span><span class="p">,</span> <span class="n">mock_post</span>
+    <span class="p">):</span>
+        <span class="n">mock_post</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="mi">201</span>
+        <span class="n">mock_post</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">"Created"</span>
+        <span class="n">mock_post</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">raise_for_status</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="c1"># Create another reader subscribed to the journalist.</span>
+        <span class="n">second_reader</span> <span class="o">=</span> <span class="n">User</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">create_user</span><span class="p">(</span>
+            <span class="n">username</span><span class="o">=</span><span class="s2">"second_reader"</span><span class="p">,</span>
+            <span class="n">password</span><span class="o">=</span><span class="s2">"TestPassword123!"</span><span class="p">,</span>
+            <span class="n">email</span><span class="o">=</span><span class="s2">"second@example.com"</span><span class="p">,</span>
+            <span class="n">role</span><span class="o">=</span><span class="s2">"reader"</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># Subscribe both readers to the journalist.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">journalist</span><span class="o">.</span><span class="n">journalist_subscribers</span><span class="o">.</span><span class="n">add</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">reader</span><span class="p">,</span>
+            <span class="n">second_reader</span><span class="p">,</span>
+        <span class="p">)</span>
+
+        <span class="c1"># The first reader is already subscribed to the publisher.</span>
+        <span class="c1"># This tests that duplicate email addresses are removed.</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">publisher</span><span class="o">.</span><span class="n">subscribers</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">second_reader</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_login</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">editor</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">reverse</span><span class="p">(</span>
+                <span class="s2">"news:approve_article"</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">id</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">302</span><span class="p">)</span>
+
+        <span class="n">mock_send_mail</span><span class="o">.</span><span class="n">assert_called_once</span><span class="p">()</span>
+
+        <span class="n">sent_recipients</span> <span class="o">=</span> <span class="n">mock_send_mail</span><span class="o">.</span><span class="n">call_args</span><span class="o">.</span><span class="n">kwargs</span><span class="p">[</span>
+            <span class="s2">"recipient_list"</span>
+        <span class="p">]</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="nb">sorted</span><span class="p">(</span><span class="n">sent_recipients</span><span class="p">),</span>
+            <span class="p">[</span><span class="s2">"reader@example.com"</span><span class="p">,</span> <span class="s2">"second@example.com"</span><span class="p">],</span>
+        <span class="p">)</span>
+
+        <span class="n">mock_post</span><span class="o">.</span><span class="n">assert_called_once</span><span class="p">()</span>
+
+    <span class="nd">@override_settings</span><span class="p">(</span>
+        <span class="n">APPROVED_ARTICLE_API_URL</span><span class="o">=</span><span class="s2">"https://example.com/api/approved/"</span><span class="p">,</span>
+        <span class="n">INTERNAL_API_KEY</span><span class="o">=</span><span class="s2">"test-api-key"</span><span class="p">,</span>
+    <span class="p">)</span>
+        
+    <span class="nd">@patch</span><span class="p">(</span><span class="s2">"news.signals.requests.post"</span><span class="p">)</span>
+    <span class="nd">@patch</span><span class="p">(</span><span class="s2">"news.signals.send_mail"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_email_failure_does_not_prevent_api_submission</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">mock_send_mail</span><span class="p">,</span> <span class="n">mock_post</span>
+    <span class="p">):</span>
+        <span class="n">mock_send_mail</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="ne">Exception</span><span class="p">(</span><span class="s2">"Email service unavailable"</span><span class="p">)</span>
+
+        <span class="n">mock_post</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">status_code</span> <span class="o">=</span> <span class="mi">201</span>
+        <span class="n">mock_post</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s2">"Created"</span>
+        <span class="n">mock_post</span><span class="o">.</span><span class="n">return_value</span><span class="o">.</span><span class="n">raise_for_status</span><span class="o">.</span><span class="n">return_value</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_login</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">editor</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">reverse</span><span class="p">(</span>
+                <span class="s2">"news:approve_article"</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">id</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">302</span><span class="p">)</span>
+
+        <span class="n">mock_send_mail</span><span class="o">.</span><span class="n">assert_called_once</span><span class="p">()</span>
+        <span class="n">mock_post</span><span class="o">.</span><span class="n">assert_called_once</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">refresh_from_db</span><span class="p">()</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">status</span><span class="p">,</span>
+            <span class="n">Article</span><span class="o">.</span><span class="n">Status</span><span class="o">.</span><span class="n">APPROVED</span><span class="p">,</span>
+        <span class="p">)</span>    
+    <span class="nd">@override_settings</span><span class="p">(</span>
+        <span class="n">APPROVED_ARTICLE_API_URL</span><span class="o">=</span><span class="s2">"https://example.com/api/approved/"</span><span class="p">,</span>
+        <span class="n">INTERNAL_API_KEY</span><span class="o">=</span><span class="s2">"test-api-key"</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="nd">@patch</span><span class="p">(</span><span class="s2">"news.signals.requests.post"</span><span class="p">)</span>
+    <span class="nd">@patch</span><span class="p">(</span><span class="s2">"news.signals.send_mail"</span><span class="p">)</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">test_api_failure_is_recorded</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">mock_send_mail</span><span class="p">,</span> <span class="n">mock_post</span>
+    <span class="p">):</span>
+        <span class="n">mock_post</span><span class="o">.</span><span class="n">side_effect</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">RequestException</span><span class="p">(</span>
+            <span class="s2">"Internal API unavailable"</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">force_login</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">editor</span><span class="p">)</span>
+
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">client</span><span class="o">.</span><span class="n">post</span><span class="p">(</span>
+            <span class="n">reverse</span><span class="p">(</span>
+                <span class="s2">"news:approve_article"</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span><span class="o">.</span><span class="n">id</span><span class="p">],</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">status_code</span><span class="p">,</span> <span class="mi">302</span><span class="p">)</span>
+
+        <span class="n">mock_send_mail</span><span class="o">.</span><span class="n">assert_called_once</span><span class="p">()</span>
+        <span class="n">mock_post</span><span class="o">.</span><span class="n">assert_called_once</span><span class="p">()</span>
+
+        <span class="n">log</span> <span class="o">=</span> <span class="n">ApprovedArticleLog</span><span class="o">.</span><span class="n">objects</span><span class="o">.</span><span class="n">get</span><span class="p">(</span>
+            <span class="n">article</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">pending_article</span>
+        <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertFalse</span><span class="p">(</span><span class="n">log</span><span class="o">.</span><span class="n">success</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertIn</span><span class="p">(</span>
+            <span class="s2">"Internal API unavailable"</span><span class="p">,</span>
+            <span class="n">log</span><span class="o">.</span><span class="n">error_message</span><span class="p">,</span>
+        <span class="p">)</span>     </div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, The Weekly Times Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

@@ -21,3 +21,7 @@ __pycache__/
 .coverage
 htmlcov/
 .pytest_cache/
+
+# Sphinx documentation
+docs/build/html/.doctrees/
+docs/build/html/.buildinfo

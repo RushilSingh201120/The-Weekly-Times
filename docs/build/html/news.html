@@ -1,0 +1,1047 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The News Application &mdash; The Weekly Times 1.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=9edc463e" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=f2a433a1"></script>
+      <script src="_static/doctools.js?v=fd6eb6e6"></script>
+      <script src="_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="The Weekly Times Application Code Reference" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            The Weekly Times
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Documentation Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">The Weekly Times Application Code Reference</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="modules.html#introduction">Introduction</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="modules.html#news-application">News Application</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">The News Application</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#purpose-of-the-application">Purpose of the Application</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-reference">Module Reference</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#news-package">News Package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#news-admin-module">news.admin module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#news-api-permissions-module">news.api_permissions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#news-api-urls-module">news.api_urls module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#news-api-views-module">news.api_views module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#news-apps-module">news.apps module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#news-forms-module">news.forms module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#news-models-module">news.models module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#news-roles-module">news.roles module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#news-serializers-module">news.serializers module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#news-signals-module">news.signals module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#news-tests-module">news.tests module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#news-urls-module">news.urls module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#news-views-module">news.views module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#module-contents">Module Contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">The Weekly Times</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">The Weekly Times Application Code Reference</a></li>
+      <li class="breadcrumb-item active">The News Application</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/news.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="the-news-application">
+<h1>The News Application<a class="headerlink" href="#the-news-application" title="Link to this heading"></a></h1>
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Link to this heading"></a></h2>
+<p>The news application is the core component of The Weekly Times.
+It manages the creation, publication, review, and distribution
+of news content.</p>
+<p>The application supports three main user roles:</p>
+<ul class="simple">
+<li><p><strong>Journalists:</strong> Create and manage their own articles and newsletters.</p></li>
+<li><p><strong>Editors:</strong> Review, approve, edit, and manage submitted content.</p></li>
+<li><p><strong>Readers:</strong> Browse news content and subscribe to publishers
+and journalists.</p></li>
+</ul>
+</section>
+<section id="purpose-of-the-application">
+<h2>Purpose of the Application<a class="headerlink" href="#purpose-of-the-application" title="Link to this heading"></a></h2>
+<p>The application provides a platform where journalists can submit
+news content for editorial review. Editors are responsible for
+reviewing and approving submitted content before publication.</p>
+<p>Readers can access approved news content and subscribe to their
+preferred publishers and journalists.</p>
+<p>The application also provides REST API functionality for accessing
+approved news content and managing application resources.</p>
+</section>
+<section id="module-reference">
+<h2>Module Reference<a class="headerlink" href="#module-reference" title="Link to this heading"></a></h2>
+<p>This section provides technical documentation for the Python modules
+that implement the application’s functionality.</p>
+</section>
+<section id="news-package">
+<h2>News Package<a class="headerlink" href="#news-package" title="Link to this heading"></a></h2>
+<p>The news package contains the main components of The Weekly Times,
+including its database models, application views, forms,
+administrative functionality, permissions, and API implementation.</p>
+</section>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+<p>The following sections describe the individual Python modules
+within the news application.</p>
+</section>
+<section id="news-admin-module">
+<h2>news.admin module<a class="headerlink" href="#news-admin-module" title="Link to this heading"></a></h2>
+<p>This module configures the Django administration interface.
+It registers the application’s models and provides administrative
+controls for managing news content and user-related records.</p>
+<p id="module-news.admin">Configure Django admin for the news application models.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.admin.CustomUserAdmin">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.admin.</span></span><span class="sig-name descname"><span class="pre">CustomUserAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/admin.html#CustomUserAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.admin.CustomUserAdmin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">UserAdmin</span></code></p>
+<p>Admin configuration for users and their roles.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.admin.PublisherAdmin">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.admin.</span></span><span class="sig-name descname"><span class="pre">PublisherAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/admin.html#PublisherAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.admin.PublisherAdmin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
+<p>Configure the Django admin display for publishers.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.admin.ArticleAdmin">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.admin.</span></span><span class="sig-name descname"><span class="pre">ArticleAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/admin.html#ArticleAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.admin.ArticleAdmin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
+<p>Configure the Django admin display for articles.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.admin.NewsletterAdmin">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.admin.</span></span><span class="sig-name descname"><span class="pre">NewsletterAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/admin.html#NewsletterAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.admin.NewsletterAdmin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
+<p>Configure the Django admin display for newsletters.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.admin.ApprovedArticleLogAdmin">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.admin.</span></span><span class="sig-name descname"><span class="pre">ApprovedArticleLogAdmin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">model</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">admin_site</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/admin.html#ApprovedArticleLogAdmin"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.admin.ApprovedArticleLogAdmin" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelAdmin</span></code></p>
+<p>Configure the Django admin display for approval logs.</p>
+</dd></dl>
+
+</section>
+<section id="news-api-permissions-module">
+<h2>news.api_permissions module<a class="headerlink" href="#news-api-permissions-module" title="Link to this heading"></a></h2>
+<p>This module defines the permission classes used to control access
+to the application’s REST API resources.</p>
+<p>It helps ensure that users can only perform actions permitted
+by their assigned roles and access rights.</p>
+<p id="module-news.api_permissions">Define custom permissions for the news application’s REST API.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.api_permissions.IsJournalistOrReadOnly">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.api_permissions.</span></span><span class="sig-name descname"><span class="pre">IsJournalistOrReadOnly</span></span><a class="reference internal" href="_modules/news/api_permissions.html#IsJournalistOrReadOnly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_permissions.IsJournalistOrReadOnly" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BasePermission</span></code></p>
+<p>Allow safe reads, and restrict writes to journalists.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_permissions.IsJournalistOrReadOnly.has_permission">
+<span class="sig-name descname"><span class="pre">has_permission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_permissions.html#IsJournalistOrReadOnly.has_permission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_permissions.IsJournalistOrReadOnly.has_permission" title="Link to this definition"></a></dt>
+<dd><p>Check whether the user may read or create content.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.api_permissions.IsOwnerJournalistOrReadOnly">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.api_permissions.</span></span><span class="sig-name descname"><span class="pre">IsOwnerJournalistOrReadOnly</span></span><a class="reference internal" href="_modules/news/api_permissions.html#IsOwnerJournalistOrReadOnly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_permissions.IsOwnerJournalistOrReadOnly" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BasePermission</span></code></p>
+<p>Allow reads, and restrict changes to owners or editors.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_permissions.IsOwnerJournalistOrReadOnly.has_permission">
+<span class="sig-name descname"><span class="pre">has_permission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_permissions.html#IsOwnerJournalistOrReadOnly.has_permission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_permissions.IsOwnerJournalistOrReadOnly.has_permission" title="Link to this definition"></a></dt>
+<dd><p>Check whether the user may access or modify API content.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_permissions.IsOwnerJournalistOrReadOnly.has_object_permission">
+<span class="sig-name descname"><span class="pre">has_object_permission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">obj</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_permissions.html#IsOwnerJournalistOrReadOnly.has_object_permission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_permissions.IsOwnerJournalistOrReadOnly.has_object_permission" title="Link to this definition"></a></dt>
+<dd><p>Check whether the user may modify the specific object.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.api_permissions.IsEditorOrReadOnly">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.api_permissions.</span></span><span class="sig-name descname"><span class="pre">IsEditorOrReadOnly</span></span><a class="reference internal" href="_modules/news/api_permissions.html#IsEditorOrReadOnly"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_permissions.IsEditorOrReadOnly" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">BasePermission</span></code></p>
+<p>Allow safe reads and restrict writes to editors.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_permissions.IsEditorOrReadOnly.has_permission">
+<span class="sig-name descname"><span class="pre">has_permission</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">view</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_permissions.html#IsEditorOrReadOnly.has_permission"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_permissions.IsEditorOrReadOnly.has_permission" title="Link to this definition"></a></dt>
+<dd><p>Check whether the user may read content or perform editor actions.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="news-api-urls-module">
+<h2>news.api_urls module<a class="headerlink" href="#news-api-urls-module" title="Link to this heading"></a></h2>
+<p>This module defines the URL routes for the application’s REST API.
+It connects incoming API requests to the appropriate API views
+and endpoints.</p>
+<p id="module-news.api_urls">Define URL routes for the news application’s REST API.</p>
+</section>
+<section id="news-api-views-module">
+<h2>news.api_views module<a class="headerlink" href="#news-api-views-module" title="Link to this heading"></a></h2>
+<p>This module contains the API views responsible for handling
+requests involving articles, newsletters, publishers, and other
+application resources.</p>
+<p>It processes API operations and manages the responses returned
+to API clients.</p>
+<p id="module-news.api_views">Define API views for articles, newsletters, publishers, and subscriptions.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="news.api_views.approved_article_api">
+<span class="sig-prename descclassname"><span class="pre">news.api_views.</span></span><span class="sig-name descname"><span class="pre">approved_article_api</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#approved_article_api"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.approved_article_api" title="Link to this definition"></a></dt>
+<dd><p>Receive approved articles from the internal application.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.api_views.ArticleListCreateAPIView">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.api_views.</span></span><span class="sig-name descname"><span class="pre">ArticleListCreateAPIView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#ArticleListCreateAPIView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.ArticleListCreateAPIView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ListCreateAPIView</span></code></p>
+<p>List approved articles or create an article as a journalist.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="news.api_views.ArticleListCreateAPIView.serializer_class">
+<span class="sig-name descname"><span class="pre">serializer_class</span></span><a class="headerlink" href="#news.api_views.ArticleListCreateAPIView.serializer_class" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#news.serializers.ArticleSerializer" title="news.serializers.ArticleSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArticleSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_views.ArticleListCreateAPIView.get_queryset">
+<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#ArticleListCreateAPIView.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.ArticleListCreateAPIView.get_queryset" title="Link to this definition"></a></dt>
+<dd><p>Return approved articles for the API listing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_views.ArticleListCreateAPIView.perform_create">
+<span class="sig-name descname"><span class="pre">perform_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serializer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#ArticleListCreateAPIView.perform_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.ArticleListCreateAPIView.perform_create" title="Link to this definition"></a></dt>
+<dd><p>Create a pending article owned by the requesting journalist.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.api_views.ArticleDetailAPIView">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.api_views.</span></span><span class="sig-name descname"><span class="pre">ArticleDetailAPIView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#ArticleDetailAPIView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.ArticleDetailAPIView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RetrieveUpdateDestroyAPIView</span></code></p>
+<p>Retrieve, update, or delete an article with role restrictions.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="news.api_views.ArticleDetailAPIView.serializer_class">
+<span class="sig-name descname"><span class="pre">serializer_class</span></span><a class="headerlink" href="#news.api_views.ArticleDetailAPIView.serializer_class" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#news.serializers.ArticleSerializer" title="news.serializers.ArticleSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArticleSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_views.ArticleDetailAPIView.get_queryset">
+<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#ArticleDetailAPIView.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.ArticleDetailAPIView.get_queryset" title="Link to this definition"></a></dt>
+<dd><p>Return articles visible to the authenticated user’s role.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_views.ArticleDetailAPIView.perform_update">
+<span class="sig-name descname"><span class="pre">perform_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serializer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#ArticleDetailAPIView.perform_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.ArticleDetailAPIView.perform_update" title="Link to this definition"></a></dt>
+<dd><p>Update an article according to the user’s role and ownership.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_views.ArticleDetailAPIView.perform_destroy">
+<span class="sig-name descname"><span class="pre">perform_destroy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#ArticleDetailAPIView.perform_destroy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.ArticleDetailAPIView.perform_destroy" title="Link to this definition"></a></dt>
+<dd><p>Delete an article when the user has the required permissions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.api_views.NewsletterListCreateAPIView">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.api_views.</span></span><span class="sig-name descname"><span class="pre">NewsletterListCreateAPIView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#NewsletterListCreateAPIView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.NewsletterListCreateAPIView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ListCreateAPIView</span></code></p>
+<p>List newsletters or create one as a journalist.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="news.api_views.NewsletterListCreateAPIView.serializer_class">
+<span class="sig-name descname"><span class="pre">serializer_class</span></span><a class="headerlink" href="#news.api_views.NewsletterListCreateAPIView.serializer_class" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#news.serializers.NewsletterSerializer" title="news.serializers.NewsletterSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewsletterSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_views.NewsletterListCreateAPIView.get_queryset">
+<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#NewsletterListCreateAPIView.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.NewsletterListCreateAPIView.get_queryset" title="Link to this definition"></a></dt>
+<dd><p>Return newsletters for the API listing.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_views.NewsletterListCreateAPIView.perform_create">
+<span class="sig-name descname"><span class="pre">perform_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serializer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#NewsletterListCreateAPIView.perform_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.NewsletterListCreateAPIView.perform_create" title="Link to this definition"></a></dt>
+<dd><p>Create a newsletter owned by an authorised user.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.api_views.NewsletterDetailAPIView">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.api_views.</span></span><span class="sig-name descname"><span class="pre">NewsletterDetailAPIView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#NewsletterDetailAPIView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.NewsletterDetailAPIView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RetrieveUpdateDestroyAPIView</span></code></p>
+<p>Retrieve, update, or delete a newsletter with role restrictions.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="news.api_views.NewsletterDetailAPIView.serializer_class">
+<span class="sig-name descname"><span class="pre">serializer_class</span></span><a class="headerlink" href="#news.api_views.NewsletterDetailAPIView.serializer_class" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#news.serializers.NewsletterSerializer" title="news.serializers.NewsletterSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">NewsletterSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_views.NewsletterDetailAPIView.get_queryset">
+<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#NewsletterDetailAPIView.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.NewsletterDetailAPIView.get_queryset" title="Link to this definition"></a></dt>
+<dd><p>Return newsletters available to the authenticated user.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_views.NewsletterDetailAPIView.perform_update">
+<span class="sig-name descname"><span class="pre">perform_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serializer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#NewsletterDetailAPIView.perform_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.NewsletterDetailAPIView.perform_update" title="Link to this definition"></a></dt>
+<dd><p>Update a newsletter according to the user’s role and ownership.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_views.NewsletterDetailAPIView.perform_destroy">
+<span class="sig-name descname"><span class="pre">perform_destroy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#NewsletterDetailAPIView.perform_destroy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.NewsletterDetailAPIView.perform_destroy" title="Link to this definition"></a></dt>
+<dd><p>Delete a newsletter when the user has the required permissions.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.api_views.PublisherListCreateAPIView">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.api_views.</span></span><span class="sig-name descname"><span class="pre">PublisherListCreateAPIView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#PublisherListCreateAPIView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.PublisherListCreateAPIView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ListCreateAPIView</span></code></p>
+<p>List publishers; restrict publisher creation to editors.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="news.api_views.PublisherListCreateAPIView.serializer_class">
+<span class="sig-name descname"><span class="pre">serializer_class</span></span><a class="headerlink" href="#news.api_views.PublisherListCreateAPIView.serializer_class" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#news.serializers.PublisherSerializer" title="news.serializers.PublisherSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_views.PublisherListCreateAPIView.perform_create">
+<span class="sig-name descname"><span class="pre">perform_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serializer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#PublisherListCreateAPIView.perform_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.PublisherListCreateAPIView.perform_create" title="Link to this definition"></a></dt>
+<dd><p>Create a publisher when the requesting user is an editor.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.api_views.PublisherDetailAPIView">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.api_views.</span></span><span class="sig-name descname"><span class="pre">PublisherDetailAPIView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#PublisherDetailAPIView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.PublisherDetailAPIView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">RetrieveUpdateDestroyAPIView</span></code></p>
+<p>Retrieve publishers; restrict changes to editors.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="news.api_views.PublisherDetailAPIView.serializer_class">
+<span class="sig-name descname"><span class="pre">serializer_class</span></span><a class="headerlink" href="#news.api_views.PublisherDetailAPIView.serializer_class" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#news.serializers.PublisherSerializer" title="news.serializers.PublisherSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">PublisherSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_views.PublisherDetailAPIView.perform_update">
+<span class="sig-name descname"><span class="pre">perform_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">serializer</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#PublisherDetailAPIView.perform_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.PublisherDetailAPIView.perform_update" title="Link to this definition"></a></dt>
+<dd><p>Update a publisher when the requesting user is an editor.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_views.PublisherDetailAPIView.perform_destroy">
+<span class="sig-name descname"><span class="pre">perform_destroy</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">instance</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#PublisherDetailAPIView.perform_destroy"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.PublisherDetailAPIView.perform_destroy" title="Link to this definition"></a></dt>
+<dd><p>Delete a publisher when the requesting user is an editor.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.api_views.SubscribedArticlesAPIView">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.api_views.</span></span><span class="sig-name descname"><span class="pre">SubscribedArticlesAPIView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#SubscribedArticlesAPIView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.SubscribedArticlesAPIView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ListAPIView</span></code></p>
+<p>Return approved articles from publishers and journalists
+followed by the authenticated reader.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="news.api_views.SubscribedArticlesAPIView.serializer_class">
+<span class="sig-name descname"><span class="pre">serializer_class</span></span><a class="headerlink" href="#news.api_views.SubscribedArticlesAPIView.serializer_class" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#news.serializers.ArticleSerializer" title="news.serializers.ArticleSerializer"><code class="xref py py-class docutils literal notranslate"><span class="pre">ArticleSerializer</span></code></a></p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.api_views.SubscribedArticlesAPIView.get_queryset">
+<span class="sig-name descname"><span class="pre">get_queryset</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/api_views.html#SubscribedArticlesAPIView.get_queryset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.api_views.SubscribedArticlesAPIView.get_queryset" title="Link to this definition"></a></dt>
+<dd><p>Return approved articles from publishers and journalists followed by the reader.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="news-apps-module">
+<h2>news.apps module<a class="headerlink" href="#news-apps-module" title="Link to this heading"></a></h2>
+<p>This module contains the Django application configuration.
+It defines the NewsConfig class and handles application
+initialisation tasks, including the registration of signals.</p>
+<p id="module-news.apps">Configure the Django news application.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.apps.NewsConfig">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.apps.</span></span><span class="sig-name descname"><span class="pre">NewsConfig</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">app_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">app_module</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/apps.html#NewsConfig"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.apps.NewsConfig" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AppConfig</span></code></p>
+<p>Configure the news application and its startup behaviour.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="news.apps.NewsConfig.ready">
+<span class="sig-name descname"><span class="pre">ready</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/apps.html#NewsConfig.ready"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.apps.NewsConfig.ready" title="Link to this definition"></a></dt>
+<dd><p>Register role group creation and article notification signals.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="news-forms-module">
+<h2>news.forms module<a class="headerlink" href="#news-forms-module" title="Link to this heading"></a></h2>
+<p>This module contains the forms used to collect and validate
+user input within the application.</p>
+<p>It supports the processing of information submitted through
+the application’s forms, including article and user-related
+information.</p>
+<p id="module-news.forms">Define forms for article, newsletter, and user registration.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.forms.ArticleForm">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.forms.</span></span><span class="sig-name descname"><span class="pre">ArticleForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/forms.html#ArticleForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.forms.ArticleForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<p>Form for journalists to create and edit their articles.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.forms.ArticleForm.Meta">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/news/forms.html#ArticleForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.forms.ArticleForm.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Define the article fields and form widgets.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="news.forms.ArticleForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#news.forms.ArticleForm.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#news.models.Article" title="news.models.Article"><code class="xref py py-class docutils literal notranslate"><span class="pre">Article</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="news.forms.ArticleForm.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#news.forms.ArticleForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.forms.RegistrationForm">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.forms.</span></span><span class="sig-name descname"><span class="pre">RegistrationForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/forms.html#RegistrationForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.forms.RegistrationForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">UserCreationForm</span></code></p>
+<p>Allow new users to register as readers or journalists.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.forms.RegistrationForm.Meta">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/news/forms.html#RegistrationForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.forms.RegistrationForm.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Define the fields included in the registration form.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="news.forms.RegistrationForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#news.forms.RegistrationForm.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#news.models.CustomUser" title="news.models.CustomUser"><code class="xref py py-class docutils literal notranslate"><span class="pre">CustomUser</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.forms.RegistrationForm.save">
+<span class="sig-name descname"><span class="pre">save</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">commit</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/forms.html#RegistrationForm.save"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.forms.RegistrationForm.save" title="Link to this definition"></a></dt>
+<dd><p>Save the registered user with the selected role.</p>
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="news.forms.RegistrationForm.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#news.forms.RegistrationForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.forms.NewsletterForm">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.forms.</span></span><span class="sig-name descname"><span class="pre">NewsletterForm</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">data</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">auto_id</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'id_%s'</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">initial</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">error_class</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">&lt;class</span> <span class="pre">'django.forms.utils.ErrorList'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">label_suffix</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">empty_permitted</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">use_required_attribute</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">renderer</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/forms.html#NewsletterForm"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.forms.NewsletterForm" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelForm</span></code></p>
+<p>Form for journalists to create and edit newsletters.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.forms.NewsletterForm.Meta">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/news/forms.html#NewsletterForm.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.forms.NewsletterForm.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Define the newsletter fields and form widgets.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="news.forms.NewsletterForm.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#news.forms.NewsletterForm.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#news.models.Newsletter" title="news.models.Newsletter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Newsletter</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py property">
+<dt class="sig sig-object py" id="news.forms.NewsletterForm.media">
+<span class="property"><span class="k"><span class="pre">property</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">media</span></span><a class="headerlink" href="#news.forms.NewsletterForm.media" title="Link to this definition"></a></dt>
+<dd><p>Return all media required to render the widgets on this form.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="news-models-module">
+<h2>news.models module<a class="headerlink" href="#news-models-module" title="Link to this heading"></a></h2>
+<p>This module defines the database models used by The Weekly Times.</p>
+<p>These models represent the application’s main data structures,
+including users, articles, newsletters, publishers, and their
+associated relationships.</p>
+<p>The models provide the foundation for storing and managing
+the application’s news content and user information.</p>
+<p id="module-news.models">Define the database models for The Weekly Times news application.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.models.CustomUser">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.models.</span></span><span class="sig-name descname"><span class="pre">CustomUser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/models.html#CustomUser"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.models.CustomUser" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">AbstractUser</span></code></p>
+<p>Represent a user with a reader, journalist, or editor role.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.models.CustomUser.Role">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Role</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/models.html#CustomUser.Role"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.models.CustomUser.Role" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TextChoices</span></code></p>
+<p>Define the available roles for application users.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.CustomUser.DoesNotExist">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#news.models.CustomUser.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.CustomUser.MultipleObjectsReturned">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#news.models.CustomUser.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.CustomUser.NotUpdated">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#news.models.CustomUser.NotUpdated" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.models.Publisher">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.models.</span></span><span class="sig-name descname"><span class="pre">Publisher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/models.html#Publisher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.models.Publisher" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Represent a publishing organisation with editors and journalists.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.Publisher.DoesNotExist">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#news.models.Publisher.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.Publisher.MultipleObjectsReturned">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#news.models.Publisher.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.Publisher.NotUpdated">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#news.models.Publisher.NotUpdated" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.models.Article">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.models.</span></span><span class="sig-name descname"><span class="pre">Article</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/models.html#Article"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.models.Article" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Represent an article written by a journalist and reviewed by an editor.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.models.Article.Status">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">values</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/models.html#Article.Status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.models.Article.Status" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TextChoices</span></code></p>
+<p>Define the available approval statuses for articles.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.Article.DoesNotExist">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#news.models.Article.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.Article.MultipleObjectsReturned">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#news.models.Article.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.Article.NotUpdated">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#news.models.Article.NotUpdated" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.models.Newsletter">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.models.</span></span><span class="sig-name descname"><span class="pre">Newsletter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/models.html#Newsletter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.models.Newsletter" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Represent a newsletter containing articles.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.Newsletter.DoesNotExist">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#news.models.Newsletter.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.Newsletter.MultipleObjectsReturned">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#news.models.Newsletter.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.Newsletter.NotUpdated">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#news.models.Newsletter.NotUpdated" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.models.ApprovedArticleLog">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.models.</span></span><span class="sig-name descname"><span class="pre">ApprovedArticleLog</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/models.html#ApprovedArticleLog"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.models.ApprovedArticleLog" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Model</span></code></p>
+<p>Record attempts to submit approved articles to the internal API.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.ApprovedArticleLog.DoesNotExist">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">DoesNotExist</span></span><a class="headerlink" href="#news.models.ApprovedArticleLog.DoesNotExist" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectDoesNotExist</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.ApprovedArticleLog.MultipleObjectsReturned">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">MultipleObjectsReturned</span></span><a class="headerlink" href="#news.models.ApprovedArticleLog.MultipleObjectsReturned" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">MultipleObjectsReturned</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt class="sig sig-object py" id="news.models.ApprovedArticleLog.NotUpdated">
+<span class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">NotUpdated</span></span><a class="headerlink" href="#news.models.ApprovedArticleLog.NotUpdated" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ObjectNotUpdated</span></code>, <code class="xref py py-class docutils literal notranslate"><span class="pre">DatabaseError</span></code></p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="news-roles-module">
+<h2>news.roles module<a class="headerlink" href="#news-roles-module" title="Link to this heading"></a></h2>
+<p>This module manages the application’s user roles and permissions.</p>
+<p>It contains functionality for assigning and managing the
+Reader, Editor, and Journalist roles and their associated
+Django permissions.</p>
+<p id="module-news.roles">Create role groups and assign users to groups based on their roles.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="news.roles.create_role_groups">
+<span class="sig-prename descclassname"><span class="pre">news.roles.</span></span><span class="sig-name descname"><span class="pre">create_role_groups</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/roles.html#create_role_groups"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.roles.create_role_groups" title="Link to this definition"></a></dt>
+<dd><p>Create the Reader, Journalist, and Editor groups with permissions.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.roles.assign_user_role_group">
+<span class="sig-prename descclassname"><span class="pre">news.roles.</span></span><span class="sig-name descname"><span class="pre">assign_user_role_group</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/roles.html#assign_user_role_group"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.roles.assign_user_role_group" title="Link to this definition"></a></dt>
+<dd><p>Keep a user’s group membership aligned with their role.</p>
+</dd></dl>
+
+</section>
+<section id="news-serializers-module">
+<h2>news.serializers module<a class="headerlink" href="#news-serializers-module" title="Link to this heading"></a></h2>
+<p>This module contains the serializers used by the Django REST
+Framework API.</p>
+<p>Serializers convert application model data into formats suitable
+for API responses and handle incoming data during API operations.</p>
+<p id="module-news.serializers">Define serializers for news application API data.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.serializers.ArticleSerializer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.serializers.</span></span><span class="sig-name descname"><span class="pre">ArticleSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/serializers.html#ArticleSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.serializers.ArticleSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelSerializer</span></code></p>
+<p>Serialize article data for API requests and responses.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.serializers.ArticleSerializer.Meta">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/news/serializers.html#ArticleSerializer.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.serializers.ArticleSerializer.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Define the article fields and read-only fields.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="news.serializers.ArticleSerializer.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#news.serializers.ArticleSerializer.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#news.models.Article" title="news.models.Article"><code class="xref py py-class docutils literal notranslate"><span class="pre">Article</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.serializers.NewsletterSerializer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.serializers.</span></span><span class="sig-name descname"><span class="pre">NewsletterSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/serializers.html#NewsletterSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.serializers.NewsletterSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelSerializer</span></code></p>
+<p>Serialize newsletter data for API requests and responses.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.serializers.NewsletterSerializer.Meta">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/news/serializers.html#NewsletterSerializer.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.serializers.NewsletterSerializer.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Define the newsletter fields and read-only fields.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="news.serializers.NewsletterSerializer.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#news.serializers.NewsletterSerializer.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#news.models.Newsletter" title="news.models.Newsletter"><code class="xref py py-class docutils literal notranslate"><span class="pre">Newsletter</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.serializers.PublisherSerializer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.serializers.</span></span><span class="sig-name descname"><span class="pre">PublisherSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/serializers.html#PublisherSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.serializers.PublisherSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelSerializer</span></code></p>
+<p>Serialize publisher data for API requests and responses.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.serializers.PublisherSerializer.Meta">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/news/serializers.html#PublisherSerializer.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.serializers.PublisherSerializer.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Define the publisher fields and read-only fields.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="news.serializers.PublisherSerializer.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#news.serializers.PublisherSerializer.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#news.models.Publisher" title="news.models.Publisher"><code class="xref py py-class docutils literal notranslate"><span class="pre">Publisher</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.serializers.UserSerializer">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.serializers.</span></span><span class="sig-name descname"><span class="pre">UserSerializer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/serializers.html#UserSerializer"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.serializers.UserSerializer" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ModelSerializer</span></code></p>
+<p>Serialize user information for API requests and responses.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.serializers.UserSerializer.Meta">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-name descname"><span class="pre">Meta</span></span><a class="reference internal" href="_modules/news/serializers.html#UserSerializer.Meta"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.serializers.UserSerializer.Meta" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Define the user fields and mark them as read-only.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="news.serializers.UserSerializer.Meta.model">
+<span class="sig-name descname"><span class="pre">model</span></span><a class="headerlink" href="#news.serializers.UserSerializer.Meta.model" title="Link to this definition"></a></dt>
+<dd><p>alias of <a class="reference internal" href="#news.models.CustomUser" title="news.models.CustomUser"><code class="xref py py-class docutils literal notranslate"><span class="pre">CustomUser</span></code></a></p>
+</dd></dl>
+
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="news-signals-module">
+<h2>news.signals module<a class="headerlink" href="#news-signals-module" title="Link to this heading"></a></h2>
+<p>This module contains Django signal handlers that respond to
+specific application events.</p>
+<p>It supports automated tasks associated with application events,
+including the creation and configuration of user role groups.</p>
+<p id="module-news.signals">Handle article status changes, subscriber notifications, and API submissions.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="news.signals.remember_previous_article_status">
+<span class="sig-prename descclassname"><span class="pre">news.signals.</span></span><span class="sig-name descname"><span class="pre">remember_previous_article_status</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/signals.html#remember_previous_article_status"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.signals.remember_previous_article_status" title="Link to this definition"></a></dt>
+<dd><p>Remember an existing article’s status before it is saved.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.signals.handle_approved_article">
+<span class="sig-prename descclassname"><span class="pre">news.signals.</span></span><span class="sig-name descname"><span class="pre">handle_approved_article</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sender</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">instance</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">created</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/signals.html#handle_approved_article"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.signals.handle_approved_article" title="Link to this definition"></a></dt>
+<dd><p>Notify subscribers only when an article becomes approved.</p>
+</dd></dl>
+
+</section>
+<section id="news-tests-module">
+<h2>news.tests module<a class="headerlink" href="#news-tests-module" title="Link to this heading"></a></h2>
+<p>This module contains automated tests for the news application.</p>
+<p>These tests help verify application behaviour and check that
+important functionality operates as expected.</p>
+<p id="module-news.tests">Test news application functionality and API permissions.</p>
+<dl class="py class">
+<dt class="sig sig-object py" id="news.tests.NewsAPIPermissionTests">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.tests.</span></span><span class="sig-name descname"><span class="pre">NewsAPIPermissionTests</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">methodName</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'runTest'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/tests.html#NewsAPIPermissionTests"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.tests.NewsAPIPermissionTests" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">TestCase</span></code></p>
+<p>Test role-based access to the article API.</p>
+<p>Create an instance of the class that will use the named test
+method when executed. Raises a ValueError if the instance does
+not have a method with the specified name.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="news.tests.NewsAPIPermissionTests.setUp">
+<span class="sig-name descname"><span class="pre">setUp</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/tests.html#NewsAPIPermissionTests.setUp"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.tests.NewsAPIPermissionTests.setUp" title="Link to this definition"></a></dt>
+<dd><p>Create test users, a publisher, and sample articles.</p>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="news-urls-module">
+<h2>news.urls module<a class="headerlink" href="#news-urls-module" title="Link to this heading"></a></h2>
+<p>This module defines the URL patterns for the main news application.</p>
+<p>It connects browser requests to the appropriate application views,
+allowing users to access the different pages and features
+of The Weekly Times.</p>
+<p id="module-news.urls">Define URL routes for the news application’s web pages.</p>
+</section>
+<section id="news-views-module">
+<h2>news.views module<a class="headerlink" href="#news-views-module" title="Link to this heading"></a></h2>
+<p>This module contains the main application views.</p>
+<p>It handles user requests and manages the functionality associated
+with displaying articles, managing journalist content,
+and providing access to the application’s different pages.</p>
+<p>It also supports article creation, editing, deletion,
+and other application operations.</p>
+<p id="module-news.views">Define the views for The Weekly Times news application.</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.article_list">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">article_list</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#article_list"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.article_list" title="Link to this definition"></a></dt>
+<dd><p>Display approved articles and available newsletters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.article_detail">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">article_detail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">article_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#article_detail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.article_detail" title="Link to this definition"></a></dt>
+<dd><p>Display an approved article, or allow its author/editor to view it.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.journalist_dashboard">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">journalist_dashboard</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#journalist_dashboard"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.journalist_dashboard" title="Link to this definition"></a></dt>
+<dd><p>Display the logged-in journalist’s articles and newsletters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.article_create">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">article_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#article_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.article_create" title="Link to this definition"></a></dt>
+<dd><p>Allow journalists to submit articles for editorial approval.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.article_update">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">article_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">article_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#article_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.article_update" title="Link to this definition"></a></dt>
+<dd><p>Allow editors to edit any article and journalists to edit their own.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.article_delete">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">article_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">article_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#article_delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.article_delete" title="Link to this definition"></a></dt>
+<dd><p>Allow editors to delete any article and journalists to delete their own.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.review_queue">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">review_queue</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#review_queue"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.review_queue" title="Link to this definition"></a></dt>
+<dd><p>Show pending articles to editors.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.approve_article">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">approve_article</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">article_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#approve_article"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.approve_article" title="Link to this definition"></a></dt>
+<dd><p>Allow editors to approve pending articles.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.subscriptions">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">subscriptions</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#subscriptions"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.subscriptions" title="Link to this definition"></a></dt>
+<dd><p>Show journalists and publishers a reader can follow.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.subscribe_journalist">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">subscribe_journalist</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">journalist_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#subscribe_journalist"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.subscribe_journalist" title="Link to this definition"></a></dt>
+<dd><p>Subscribe to or unsubscribe from a journalist.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.subscribe_publisher">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">subscribe_publisher</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">publisher_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#subscribe_publisher"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.subscribe_publisher" title="Link to this definition"></a></dt>
+<dd><p>Subscribe to or unsubscribe from a publisher.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.register">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">register</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#register"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.register" title="Link to this definition"></a></dt>
+<dd><p>Register a new reader or journalist account.</p>
+</dd></dl>
+
+<dl class="py class">
+<dt class="sig sig-object py" id="news.views.RoleBasedLoginView">
+<span class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></span><span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">RoleBasedLoginView</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#RoleBasedLoginView"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.RoleBasedLoginView" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">LoginView</span></code></p>
+<p>Redirect users to the correct page for their role.</p>
+<p>Constructor. Called in the URLconf; can contain helpful extra
+keyword arguments, and other things.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="news.views.RoleBasedLoginView.get_success_url">
+<span class="sig-name descname"><span class="pre">get_success_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#RoleBasedLoginView.get_success_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.RoleBasedLoginView.get_success_url" title="Link to this definition"></a></dt>
+<dd><p>Return the destination appropriate for the user’s role.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="news.views.RoleBasedLoginView.get_redirect_url">
+<span class="sig-name descname"><span class="pre">get_redirect_url</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#RoleBasedLoginView.get_redirect_url"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.RoleBasedLoginView.get_redirect_url" title="Link to this definition"></a></dt>
+<dd><p>Prevent custom redirects from overriding role-based navigation.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.newsletter_create">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">newsletter_create</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#newsletter_create"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.newsletter_create" title="Link to this definition"></a></dt>
+<dd><p>Allow journalists to create newsletters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.newsletter_update">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">newsletter_update</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newsletter_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#newsletter_update"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.newsletter_update" title="Link to this definition"></a></dt>
+<dd><p>Allow editors to edit any newsletter and journalists their own.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.newsletter_delete">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">newsletter_delete</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newsletter_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#newsletter_delete"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.newsletter_delete" title="Link to this definition"></a></dt>
+<dd><p>Allow editors to delete any newsletter and journalists their own.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.editor_article_management">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">editor_article_management</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#editor_article_management"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.editor_article_management" title="Link to this definition"></a></dt>
+<dd><p>Allow editors to view and manage all articles.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.editor_newsletter_management">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">editor_newsletter_management</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#editor_newsletter_management"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.editor_newsletter_management" title="Link to this definition"></a></dt>
+<dd><p>Allow editors to view and manage all newsletters.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="news.views.newsletter_detail">
+<span class="sig-prename descclassname"><span class="pre">news.views.</span></span><span class="sig-name descname"><span class="pre">newsletter_detail</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">request</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newsletter_id</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/news/views.html#newsletter_detail"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#news.views.newsletter_detail" title="Link to this definition"></a></dt>
+<dd><p>Display the full newsletter and its selected articles.</p>
+</dd></dl>
+
+</section>
+<section id="module-contents">
+<h2>Module Contents<a class="headerlink" href="#module-contents" title="Link to this heading"></a></h2>
+<p>The following section provides additional documentation
+for the news package itself.</p>
+<span class="target" id="module-news"></span></section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="modules.html" class="btn btn-neutral float-left" title="The Weekly Times Application Code Reference" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2026, The Weekly Times Team.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

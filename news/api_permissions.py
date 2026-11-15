@@ -1,4 +1,4 @@
-
+"""Define custom permissions for the news application's REST API."""
 from rest_framework.permissions import BasePermission, SAFE_METHODS
 
 
@@ -6,6 +6,7 @@ class IsJournalistOrReadOnly(BasePermission):
     """Allow safe reads, and restrict writes to journalists."""
 
     def has_permission(self, request, view):
+        """Check whether the user may read or create content."""
         if request.method in SAFE_METHODS:
             return request.user and request.user.is_authenticated
 
@@ -20,6 +21,7 @@ class IsOwnerJournalistOrReadOnly(BasePermission):
     """Allow reads, and restrict changes to owners or editors."""
 
     def has_permission(self, request, view):
+        """Check whether the user may access or modify API content."""
         if not request.user or not request.user.is_authenticated:
             return False
 
@@ -32,6 +34,7 @@ class IsOwnerJournalistOrReadOnly(BasePermission):
         )
 
     def has_object_permission(self, request, view, obj):
+        """Check whether the user may modify the specific object."""
         if request.method in SAFE_METHODS:
             return True
 
@@ -51,6 +54,7 @@ class IsEditorOrReadOnly(BasePermission):
     """Allow safe reads and restrict writes to editors."""
 
     def has_permission(self, request, view):
+        """Check whether the user may read content or perform editor actions."""
         if not request.user or not request.user.is_authenticated:
             return False
 

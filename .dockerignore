@@ -1,0 +1,30 @@
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+
+# Git
+.git/
+
+# Python virtual environments
+venv/
+myenv/
+
+# Python cache files
+__pycache__/
+*.py[cod]
+
+# Django local files
+db.sqlite3
+media/
+weekly_times_backup.json
+
+# Test and coverage files
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editor files
+.vscode/
+.idea/
+

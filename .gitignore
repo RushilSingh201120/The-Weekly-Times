@@ -22,6 +22,9 @@ __pycache__/
 htmlcov/
 .pytest_cache/
 
+# Sphinx documentation
+docs/build/html/.doctrees/
+docs/build/html/.buildinfo
 
 # Local database backup
 weekly_times_backup.json

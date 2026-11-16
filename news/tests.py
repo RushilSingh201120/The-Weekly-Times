@@ -1,4 +1,4 @@
-
+"""Test news application functionality and API permissions."""
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
@@ -19,6 +19,7 @@ class NewsAPIPermissionTests(TestCase):
     """Test role-based access to the article API."""
 
     def setUp(self):
+        """Create test users, a publisher, and sample articles."""
         self.reader = User.objects.create_user(
             username="test_reader",
             password="TestPassword123!",

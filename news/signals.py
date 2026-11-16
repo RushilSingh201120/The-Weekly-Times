@@ -1,4 +1,4 @@
-
+"""Handle article status changes, subscriber notifications, and API submissions."""
 import logging
 
 import requests

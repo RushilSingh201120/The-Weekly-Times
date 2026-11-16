@@ -1,4 +1,4 @@
-
+"""Configure Django admin for the news application models."""
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 
@@ -29,12 +29,14 @@ class CustomUserAdmin(UserAdmin):
 
 @admin.register(Publisher)
 class PublisherAdmin(admin.ModelAdmin):
+    """Configure the Django admin display for publishers."""
     list_display = ("name", "created_at")
     search_fields = ("name",)
 
 
 @admin.register(Article)
 class ArticleAdmin(admin.ModelAdmin):
+    """Configure the Django admin display for articles."""
     list_display = (
         "title",
         "author",
@@ -49,12 +51,14 @@ class ArticleAdmin(admin.ModelAdmin):
 
 @admin.register(Newsletter)
 class NewsletterAdmin(admin.ModelAdmin):
+    """Configure the Django admin display for newsletters."""
     list_display = ("title", "author", "publisher", "created_at")
     search_fields = ("title", "author__username")
 
 
 @admin.register(ApprovedArticleLog)
 class ApprovedArticleLogAdmin(admin.ModelAdmin):
+    """Configure the Django admin display for approval logs."""
     list_display = (
         "article",
         "success",

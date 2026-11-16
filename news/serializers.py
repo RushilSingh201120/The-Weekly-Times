@@ -1,3 +1,4 @@
+"""Define serializers for news application API data."""
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
@@ -7,6 +8,7 @@ from .models import Article, Newsletter, Publisher
 User = get_user_model()
 
 class ArticleSerializer(serializers.ModelSerializer):
+    """Serialize article data for API requests and responses."""
     author_username = serializers.CharField(
         source="author.username",
         read_only=True,
@@ -17,6 +19,7 @@ class ArticleSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
+        """Define the article fields and read-only fields."""
         model = Article
         fields = [
             "id",
@@ -44,6 +47,7 @@ class ArticleSerializer(serializers.ModelSerializer):
 
 
 class NewsletterSerializer(serializers.ModelSerializer):
+    """Serialize newsletter data for API requests and responses."""
     author_username = serializers.CharField(
         source="author.username",
         read_only=True,
@@ -54,6 +58,7 @@ class NewsletterSerializer(serializers.ModelSerializer):
     )
 
     class Meta:
+        """Define the newsletter fields and read-only fields."""
         model = Newsletter
         fields = [
             "id",
@@ -76,7 +81,9 @@ class NewsletterSerializer(serializers.ModelSerializer):
 
 
 class PublisherSerializer(serializers.ModelSerializer):
+    """Serialize publisher data for API requests and responses."""
     class Meta:
+        """Define the publisher fields and read-only fields."""
         model = Publisher
         fields = [
             "id",
@@ -93,7 +100,9 @@ class PublisherSerializer(serializers.ModelSerializer):
         ]
 
 class UserSerializer(serializers.ModelSerializer):
+    """Serialize user information for API requests and responses."""
     class Meta:
+        """Define the user fields and mark them as read-only."""
         model = User
         fields = [
             "id",

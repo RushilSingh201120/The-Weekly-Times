@@ -1,4 +1,4 @@
-
+"""Create role groups and assign users to groups based on their roles."""
 from django.contrib.auth.models import Group, Permission
 from django.contrib.contenttypes.models import ContentType
 

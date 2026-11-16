@@ -1,11 +1,11 @@
-
+"""Define the views for The Weekly Times news application."""
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
-from .forms import ArticleForm , RegistrationForm , NewsletterForm
-from .models import Article, Publisher , Newsletter
+from .forms import ArticleForm, RegistrationForm, NewsletterForm
+from .models import Article, Publisher, Newsletter
 from django.contrib.auth import get_user_model
 
 from django.contrib import messages
@@ -432,6 +432,7 @@ class RoleBasedLoginView(LoginView):
     template_name = "registration/login.html"
 
     def get_success_url(self):
+        """Return the destination appropriate for the user's role."""
         user = self.request.user
 
         if user.role == "journalist":
@@ -443,6 +444,7 @@ class RoleBasedLoginView(LoginView):
         return reverse("news:article_list")
 
     def get_redirect_url(self):
+        """Prevent custom redirects from overriding role-based navigation."""
         # Ignore the submitted "next" destination so role-based
         # redirects take priority.
         return ""

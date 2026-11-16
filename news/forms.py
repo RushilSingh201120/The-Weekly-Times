@@ -1,4 +1,4 @@
-
+"""Define forms for article, newsletter, and user registration."""
 from django import forms
 from django.contrib.auth.forms import UserCreationForm
 
@@ -9,6 +9,7 @@ class ArticleForm(forms.ModelForm):
     """Form for journalists to create and edit their articles."""
 
     class Meta:
+        """Define the article fields and form widgets."""
         model = Article
         fields = ["title", "content", "publisher"]
 
@@ -40,6 +41,7 @@ class RegistrationForm(UserCreationForm):
     )
 
     class Meta:
+        """Define the fields included in the registration form."""
         model = CustomUser
         fields = [
             "username",
@@ -48,6 +50,7 @@ class RegistrationForm(UserCreationForm):
         ]
 
     def save(self, commit=True):
+        """Save the registered user with the selected role."""
         user = super().save(commit=False)
         user.role = self.cleaned_data["role"]
 
@@ -60,6 +63,7 @@ class NewsletterForm(forms.ModelForm):
     """Form for journalists to create and edit newsletters."""
 
     class Meta:
+        """Define the newsletter fields and form widgets."""
         model = Newsletter
         fields = ["title", "content", "publisher", "articles"]
 

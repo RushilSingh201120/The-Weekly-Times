@@ -1,13 +1,17 @@
 
+"""Define the database models for The Weekly Times news application."""
+
 from django.conf import settings
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 
 class CustomUser(AbstractUser):
-    """Custom user model with reader, journalist, and editor roles."""
+    """Represent a user with a reader, journalist, or editor role."""
 
     class Role(models.TextChoices):
+        """Define the available roles for application users."""
+
         READER = "reader", "Reader"
         JOURNALIST = "journalist", "Journalist"
         EDITOR = "editor", "Editor"
@@ -27,11 +31,12 @@ class CustomUser(AbstractUser):
     )
 
     def __str__(self):
+        """Return the username and displayed role of the user."""
         return f"{self.username} ({self.get_role_display()})"
 
 
 class Publisher(models.Model):
-    """A publishing organisation with editors and journalists."""
+    """Represent a publishing organisation with editors and journalists."""
 
     name = models.CharField(max_length=200, unique=True)
     description = models.TextField(blank=True)
@@ -60,13 +65,16 @@ class Publisher(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
+        """Return the publisher's name."""
         return self.name
 
 
 class Article(models.Model):
-    """An article written by a journalist and reviewed by an editor."""
+    """Represent an article written by a journalist and reviewed by an editor."""
 
     class Status(models.TextChoices):
+        """Define the available approval statuses for articles."""
+
         PENDING = "pending", "Pending approval"
         APPROVED = "approved", "Approved"
 
@@ -109,14 +117,17 @@ class Article(models.Model):
     )
 
     class Meta:
+        """Configure the default ordering and metadata for articles."""
+
         ordering = ["-created_at"]
 
     def __str__(self):
+        """Return the article's title."""
         return self.title
 
 
 class Newsletter(models.Model):
-    """A newsletter containing articles, created by a journalist or editor."""
+    """Represent a newsletter containing articles."""
 
     title = models.CharField(max_length=250)
     content = models.TextField()
@@ -146,14 +157,17 @@ class Newsletter(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
+        """Configure the default ordering for newsletters."""
+
         ordering = ["-created_at"]
 
     def __str__(self):
+        """Return the newsletter's title."""
         return self.title
 
 
 class ApprovedArticleLog(models.Model):
-    """Records attempts to send approved articles to the internal API."""
+    """Record attempts to submit approved articles to the internal API."""
 
     article = models.ForeignKey(
         Article,
@@ -172,12 +186,15 @@ class ApprovedArticleLog(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
+        """Configure log ordering and the article approval permission."""
+
         ordering = ["-created_at"]
         permissions = [
             ("approve_article", "Can approve article"),
         ]
 
     def __str__(self):
+        """Return a description of the API log and its creation time."""
         return (
             f"API log for {self.article.title} "
             f"({self.created_at:%Y-%m-%d %H:%M})"

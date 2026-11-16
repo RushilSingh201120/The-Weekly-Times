@@ -1,3 +1,4 @@
+"""Define API views for articles, newsletters, publishers, and subscriptions."""
 from django.db import models
 import hmac
 
@@ -82,11 +83,13 @@ class ArticleListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        """Return approved articles for the API listing."""
         return Article.objects.select_related(
             "author", "publisher", "approved_by"
         ).filter(status=Article.Status.APPROVED)
 
     def perform_create(self, serializer):
+        """Create a pending article owned by the requesting journalist."""
         if self.request.user.role != "journalist":
             raise PermissionDenied(
                 "Only journalists can create articles."
@@ -108,6 +111,7 @@ class ArticleDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     ]
 
     def get_queryset(self):
+        """Return articles visible to the authenticated user's role."""
         user = self.request.user
 
         if user.role == "editor" or user.is_superuser:
@@ -128,6 +132,7 @@ class ArticleDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         ).filter(status=Article.Status.APPROVED)
 
     def perform_update(self, serializer):
+        """Update an article according to the user's role and ownership."""
         user = self.request.user
 
         if user.role == "editor" or user.is_superuser:
@@ -143,6 +148,7 @@ class ArticleDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         serializer.save()
 
     def perform_destroy(self, instance):
+        """Delete an article when the user has the required permissions."""
         user = self.request.user
 
         if user.role == "editor" or user.is_superuser:
@@ -165,11 +171,13 @@ class NewsletterListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        """Return newsletters for the API listing."""
         return Newsletter.objects.select_related(
             "author", "publisher"
         ).all()
 
     def perform_create(self, serializer):
+        """Create a newsletter owned by an authorised user."""
         user = self.request.user
 
         if user.role not in ["journalist", "editor"] and not user.is_superuser:
@@ -190,11 +198,13 @@ class NewsletterDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     ]
 
     def get_queryset(self):
+        """Return newsletters available to the authenticated user."""
         return Newsletter.objects.select_related(
             "author", "publisher"
         ).all()
 
     def perform_update(self, serializer):
+        """Update a newsletter according to the user's role and ownership."""
         user = self.request.user
 
         if user.role == "editor" or user.is_superuser:
@@ -210,6 +220,7 @@ class NewsletterDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         serializer.save()
 
     def perform_destroy(self, instance):
+        """Delete a newsletter when the user has the required permissions."""
         user = self.request.user
 
         if user.role == "editor" or user.is_superuser:
@@ -235,6 +246,7 @@ class PublisherListCreateAPIView(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
+        """Create a publisher when the requesting user is an editor."""
         user = self.request.user
 
         if user.role != "editor" and not user.is_superuser:
@@ -255,6 +267,7 @@ class PublisherDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_update(self, serializer):
+        """Update a publisher when the requesting user is an editor."""
         user = self.request.user
 
         if user.role != "editor" and not user.is_superuser:
@@ -265,6 +278,7 @@ class PublisherDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
         serializer.save()
 
     def perform_destroy(self, instance):
+        """Delete a publisher when the requesting user is an editor."""
         user = self.request.user
 
         if user.role != "editor" and not user.is_superuser:
@@ -284,6 +298,7 @@ class SubscribedArticlesAPIView(generics.ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        """Return approved articles from publishers and journalists followed by the reader."""
         user = self.request.user
 
         if user.role != "reader":
